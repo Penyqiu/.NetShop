@@ -4,32 +4,37 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyShop.Core.Models;
+using MyShop.Core.ViewModels;
 using MyShop.DataAccess.InMemory;
 
 namespace MyShop.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        ProductRespository context; 
+        ProductRespository context;
+        ProductCategoryRespository productCategories;
 
         public ProductManagerController()
         {
             context = new ProductRespository();
+            productCategories = new ProductCategoryRespository();
         }
         // GET: ProductManager
         public ActionResult Index()
         {
-            List<Product> products = context.Collection().ToList();
+            List<ProductsCategories> products = context.Collection().ToList();
 
             return View(products);
         }
         public ActionResult Create()
         {
-            Product product = new Product();
-            return View(product);
+            ProductMenagerViewModel viewModel = new ProductMenagerViewModel();
+           
+            viewModel.ProductCategories = productCategories.Collection();
+            return View(viewModel);
         }
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(ProductsCategories product)
         {
             if(!ModelState.IsValid)
             {
@@ -46,20 +51,23 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult Edit(string Id)
         {
-            Product product = context.Find(Id);
+            ProductsCategories product = context.Find(Id);
             if (product == null)
             {
                 return HttpNotFound();
             }
             else
             {
+                ProductMenagerViewModel viewModel = new ProductMenagerViewModel();
+                viewModel.Product = product;
+                viewModel.ProductCategories = productCategories.Collection();
                 return View(product);
             }
         }
         [HttpPost]
-        public ActionResult Edit(Product product,string Id)
+        public ActionResult Edit(ProductsCategories product,string Id)
         {
-            Product productToEdit = context.Find(Id);
+            ProductsCategories productToEdit = context.Find(Id);
 
             if (productToEdit == null)
             {
@@ -84,7 +92,7 @@ namespace MyShop.WebUI.Controllers
         }
         public ActionResult Delete(string Id)
         {
-            Product productToDelete = context.Find(Id);
+            ProductsCategories productToDelete = context.Find(Id);
 
             if(productToDelete==null)
             {
@@ -101,7 +109,7 @@ namespace MyShop.WebUI.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(string Id)
         {
-            Product productToDelete = context.Find(Id);
+            ProductsCategories productToDelete = context.Find(Id);
 
             if (productToDelete == null)
             {

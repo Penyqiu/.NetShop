@@ -11,14 +11,14 @@ namespace MyShop.DataAccess.InMemory
     public class ProductRespository
     {
         ObjectCache cache = MemoryCache.Default;
-        List<Product> products = new List<Product>();
+        List<ProductsCategories> products = new List<ProductsCategories>();
 
         public ProductRespository()
         {
-            products = cache["products"] as List<Product>;
+            products = cache["products"] as List<ProductsCategories>;
             if(products==null)
             {
-                products = new List<Product>();
+                products = new List<ProductsCategories>();
             }
         }
 
@@ -27,14 +27,14 @@ namespace MyShop.DataAccess.InMemory
             cache["products"] = products;
         }
 
-        public void Insert(Product p)
+        public void Insert(ProductsCategories p)
         {
             products.Add(p);
         }
 
-        public void Update(Product product)
+        public void Update(ProductsCategories product)
         {
-            Product productToUpdate = products.Find(p => p.Id == product.Id);
+            ProductsCategories productToUpdate = products.Find(p => p.Id == product.Id);
 
             if(productToUpdate!=null)
             {
@@ -46,9 +46,9 @@ namespace MyShop.DataAccess.InMemory
             }
         }
 
-        public Product Find(string Id)
+        public ProductsCategories Find(string Id)
         {
-            Product product = products.Find(p => p.Id == Id);
+            ProductsCategories product = products.Find(p => p.Id == Id);
 
             if (product != null)
             {
@@ -60,14 +60,14 @@ namespace MyShop.DataAccess.InMemory
             }
         }
 
-        public IQueryable<Product>Collection()
+        public IQueryable<ProductsCategories>Collection()
         {
             return products.AsQueryable();
         }
 
         public void Delete(string Id)
         {
-            Product productToDelete = products.Find(p => p.Id == Id);
+            ProductsCategories productToDelete = products.Find(p => p.Id == Id);
 
             if (productToDelete != null)
             {
